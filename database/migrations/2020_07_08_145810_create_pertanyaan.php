@@ -18,6 +18,7 @@ class CreatePertanyaan extends Migration
             $table->integer('penanya_id');
             $table->string('judul', 120);
             $table->longText('isi');
+            $table->string('tag');
             $table->timestamps();
         });
     }
