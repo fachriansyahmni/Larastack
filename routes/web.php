@@ -13,7 +13,7 @@
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 Route::get('/', 'PertanyaanController@index');
 Route::get('/pertanyaan', 'PertanyaanController@index')->name('question');
 Route::get('/pertanyaan/new', 'PertanyaanController@create')->middleware('auth');

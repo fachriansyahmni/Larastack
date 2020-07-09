@@ -11,4 +11,9 @@ class Profile extends Model
         'user_id', 'nama_lengkap', 'bio', 'reputation'
     ];
     public $timestamps = false;
+
+    public function User()
+    {
+        $this->hasMany('App\User');
+    }
 }
