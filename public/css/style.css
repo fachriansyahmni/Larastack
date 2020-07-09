@@ -1,0 +1,9 @@
+.tambah-pertanyaan{
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+}
+
+.tambah-pertanyaan button{
+    border-radius: 20px;
+}

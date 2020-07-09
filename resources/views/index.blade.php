@@ -1,0 +1,56 @@
+@extends('layouts.master')
+
+@section('title','LaraStack')
+
+@section('content')
+    <div class="col-lg-12 my-2">
+        @foreach ($data as $p)
+        <div class="card mb-5 p-2">
+            <div class="row no-gutters">
+                <div class="col-md-3 text-center" style="align-self: center">
+                        <div class="col-lg-12 col-md-6">
+                            <h3>0</h3>
+                            <small>votes</small>
+                        </div>
+                        <div class="col-lg-12 col-md-6 mt-2">
+                            @php
+                                $totaljwbn = App\Jawaban::where('pertanyaan_id', $p->id)->count()
+                            @endphp
+                            <h3>
+                                {{$totaljwbn}}</h3>
+                            <small>answer</small>
+                        </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{{ route('question-detail',['id' => $p->id ]) }}" class="card-link">{{ $p->judul }}</a></h5>
+                          
+                            @php
+                                $str = strip_tags($p->isi, '');
+                            @endphp
+                            <p class="card-text mb-4">{!! html_entity_decode(\Illuminate\Support\Str::limit($str, 150, $end='...')) !!}</p>
+                            <small>
+                                @foreach (explode(',',$p->tag) as $tag)
+                                            @if ($tag == "")
+                                            @else
+                                                <button class="btn btn-info btn-sm disabled">{{$tag}}</button>
+                                            @endif
+                                        @endforeach
+                                        <h6 class="card-subtitle mb-2 text-muted text-right">{{ $p->User->name }}</h6> 
+                            </small>
+                        </div>
+                </div>
+            </div>
+          </div>
+        @endforeach
+    </div>
+
+@guest
+@else
+<div class="tambah-pertanyaan">
+    <a href="{{ url('/pertanyaan/new') }}">
+        <button class="btn btn-warning btn-lg">+</button>
+    </a>
+</div>
+@endguest
+@endsection

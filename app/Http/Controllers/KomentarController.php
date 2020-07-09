@@ -3,17 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Jawaban;
-use Auth;
 
-class JawabanController extends Controller
+class KomentarController extends Controller
 {
-    public function index($pertanyaan_id)
-    {
-        $jawaban = Jawaban::find($pertanyaan_id);
-        return view('jawaban.index', compact(['jawaban']));
-    }
-
     public function store(Request $request)
     {
         $request->validate([
