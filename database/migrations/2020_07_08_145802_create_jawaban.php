@@ -16,7 +16,7 @@ class CreateJawaban extends Migration
         Schema::create('jawaban', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->longText('jawaban');
-            $table->boolean('is_best');
+            $table->boolean('is_best')->default(0);
             $table->integer('vote')->default(0);
             $table->timestamps();
         });
