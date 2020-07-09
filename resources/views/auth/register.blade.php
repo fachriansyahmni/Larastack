@@ -1,13 +1,13 @@
-@extends('layouts.master')
+@extends('layouts.master2')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card" background-color="trasnparent">
                 <div class="card-header">{{ __('Register') }}</div>
 
-                <div class="card-body">
+                <div class="card-body bg-dark text-light">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 

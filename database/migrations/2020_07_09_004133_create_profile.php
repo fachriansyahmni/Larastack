@@ -14,7 +14,6 @@ class CreateProfile extends Migration
     public function up()
     {
         Schema::create('profile', function (Blueprint $table) {
-            $table->integer('user_id');
             $table->string('nama_lengkap')->nullable();
             $table->integer('reputation')->default(0);
         });
