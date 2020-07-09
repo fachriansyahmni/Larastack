@@ -3,7 +3,14 @@
 @section('title','LaraStack')
 
 @section('content')
-    <div class="col-lg-12 my-2">
+
+<div class="col-lg-12 my-2">
+    @if ($data == "")
+    <div class="text-center mt-5">
+        <img src="{{ asset('img/bg-blank.svg') }}" width="20%" />
+        <h4>Jadilah orang pertama yang bertanya</h4>
+    </div>
+        @endif
         @foreach ($data as $p)
         <div class="card mb-5 p-2">
             <div class="row no-gutters">
