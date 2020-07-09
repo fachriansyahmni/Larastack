@@ -15,8 +15,6 @@ class CreateJawaban extends Migration
     {
         Schema::create('jawaban', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('pertanyaan_id');
-            $table->integer('user_id');
             $table->longText('jawaban');
             $table->timestamps();
         });
