@@ -47,6 +47,7 @@ class PertanyaanController extends Controller
         }
         $pertanyaan = Pertanyaan::find($id);
         $jawaban = DB::table('pertanyaan')->join('jawaban', 'jawaban.pertanyaan_id', '=', 'pertanyaan.id')->where(['pertanyaan.id' => $id])->get();
+        // dd($jawaban);
         $totaljwbn = Jawaban::where('pertanyaan_id', $id)->count();
         return view('pertanyaan.show', compact(['pertanyaan', 'jawaban', 'totaljwbn']));
     }

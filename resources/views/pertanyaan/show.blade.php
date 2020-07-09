@@ -33,7 +33,7 @@
             <div class="col-lg-2 text-center">
                 <div class="col">
                     <a href="#" class="vote-pertanyaan">
-                        <button class="btn btn-gray btn-sm" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                        <button class="btn btn-gray btn-sm" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
                     </a>
                 </div>
                 <div class="col">
@@ -41,7 +41,7 @@
                 </div>
                 <div class="col">
                     <a href="#" class="vote-pertanyaan">
-                        <button class="btn btn-gray btn-sm" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
+                        <button class="btn btn-gray btn-sm" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
                     </a>
                 </div>
             </div>
@@ -75,17 +75,59 @@
             @foreach ($jawaban as $j)
                 <div class="col-lg-2 col-sm-2 mt-2 text-center">
                     <div class="col">
-                        <button class="btn btn-gray" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                        @guest
+                        <button type="button" onclick="cek()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                        @else
+                        @php
+                            // $cekvote = DB::table('votejawaban')->whereExists(function ($query) {
+                            //                                                         $query->select(DB::raw(1))
+                            //                                                                 ->from('users')
+                            //                                                                 ->whereRaw('users.id = votejawaban.user_id');
+                            //                                                     })->get();
+                            $cekvote = DB::table('votejawaban')->join('users','users.id','=','votejawaban.user_id')->get();
+                            $result = $cekvote->count();
+                        @endphp
+                        <form action="{{ route('vote-jawaban') }}" method="POST">
+                            @csrf
+                            <input type="hidden" value="{{ $j->id }}" name="jawaban_id" >
+                            <input type="hidden" value="1" name="vote">
+                            @if($cekvote->isEmpty())
+                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                            @else
+                        @foreach ($cekvote as $c)
+                            @if($c->user_id == Auth::user()->id && $c->jawaban_id == $j->id)
+                                <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                            @endif
+                        @endforeach
+                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                            @endif
+                        </form>
+                        
+                        @endguest
                     </div>
                     <div class="col">
-                        <h3>0</h3>
+                        <h3>{{$j->vote}}</h3>
                     </div>
                     <div class="col">
-                        <button class="btn btn-gray" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
+                        @guest
+                        <button type="button" onclick="cek()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">\/</button>
+                        @else
+                        <form class="vote" action="{{ route('vote-jawaban') }}" method="POST">
+                            @csrf
+                            <input type="text" value="{{ $j->id }}" name="jawaban_id" hidden>
+                            <input type="text" value="0" name="vote" hidden>
+                            <button type="submit" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
+                        </form>
+                        @endguest
                     </div>
-                    <div class="col">
+                    @guest
+                    @else
+                    @if($pertanyaan->User->id == Auth::user()->id)
+                    <div class="col mt-3">
                         <button class="btn btn-success disabled" data-toggle="tooltip" data-placement="right" title="Jawaban ini paling tepat">Ya</button>
                     </div>
+                    @endif
+                    @endguest
                 </div>
                 <div class="col-lg-10 col-sm-10 mb-2">
                     @php
@@ -94,7 +136,15 @@
                      <p>{!! html_entity_decode($str) !!}</p>
                 </div>
                 <div class="col-12 mb-3 my-4">
-                <footer class="blockquote-footer text-right">by <cite title="Source Title">{{ $j->user_id }}</cite> </footer>
+                <footer class="blockquote-footer text-right">by <cite title="Source Title">
+                    @php
+                        $nama = DB::table('users')->join('jawaban','jawaban.user_id','=','users.id')->where('jawaban.id',$j->id)->get();
+                    @endphp
+                    @foreach($nama as $n)
+                        {{$n->name}}<br>
+                        {{$n->created_at}}
+                    @endforeach
+                    </cite> </footer>
                 <a href="{{ route('answer',$j->id) }}" class="text-decoration-none text-muted"><i>add a comment</i></a>
                      <hr>
                 </div>
@@ -108,7 +158,11 @@
                         <textarea id="youranswer" name="jawabankamu"></textarea>
                     </div>
                     <div class="form-group">
+                        @guest
+                        <button type="button" onclick="cek()" class="btn btn-primary">Post</button>
+                        @else
                         <button type="submit" class="btn btn-primary">Post</button>
+                        @endguest
                     </div>
                 </form>
             </div>
@@ -127,5 +181,15 @@
                 .catch( error => {
                             console.error( error );
                      } );
+    </script>
+    <script>
+        function cek(){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Login dulu!',
+                footer: '<a href=/login>Login</a>'
+                })
+        }
     </script>
 @endpush

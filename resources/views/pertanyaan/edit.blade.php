@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="col-lg-12 my-3 text-left">
-        <a href="{{ route('question') }}" style="text-decoration:none;"><< Back</a>
+        <a href="{{ route('question-detail',['id' => $data->id]) }}" style="text-decoration:none;"><< Back</a>
     </div>
     <div class="col-lg-12 my-2">
         <div class="row">
@@ -23,7 +23,7 @@
                       <label for="judul">Judul</label>
                     <input type="text" class="form-control" id="judul" name="judul" value="{{ $data->judul }}" placeholder="Judul">
                     </div>
-                    <div class="form-group col-md-12"">
+                    <div class="form-group col-md-12">
                         <label for="tag">Tag</label>
                         <textarea class="form-control col-6" id="tag" name="tag" rows="1">{{ $data->tag }}</textarea>
                     </div>

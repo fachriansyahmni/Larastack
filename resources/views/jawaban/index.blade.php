@@ -26,10 +26,10 @@
             </div>
         </div>
         <hr>
-        <div class="row mt-3">
+        <div class="row mt-3 mb-5">
                 Komentar (0)
             {{-- Total Komentar --}}
-            <div class="col-lg-12">
+            <div class="col-lg-12 mt-5">
                 <form action="{{ route('store-comment',['id' => $jawaban->id ]) }}" method="POST">
                     @csrf
                     <input type="text" value="{{$jawaban->id}}" name="id_jawaban" hidden>
@@ -47,7 +47,7 @@
     </div>
 @endsection
 
-@push('script')
+@push('scripts')
     <script src="https://cdn.ckeditor.com/ckeditor5/20.0.0/classic/ckeditor.js"></script>
     <script>
         ClassicEditor

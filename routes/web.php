@@ -27,3 +27,5 @@ Route::get('/jawaban/{pertanyaan_id}', 'JawabanController@index')->name('answer'
 Route::post('/jawaban/{pertanyaan_id}', 'JawabanController@store')->name('store-answer');
 
 Route::post('/komentar/{id}', 'KomentarController@store')->name('store-comment');
+
+Route::post('/vote/jawaban', 'VoteJawabanController@vote')->name('vote-jawaban');
