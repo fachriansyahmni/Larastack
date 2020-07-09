@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="col-lg-12 my-2">
-    @if ($data == "")
+    @if ($hitungdata == 0)
     <div class="text-center mt-5">
         <img src="{{ asset('img/bg-blank.svg') }}" width="20%" />
         <h4>Jadilah orang pertama yang bertanya</h4>

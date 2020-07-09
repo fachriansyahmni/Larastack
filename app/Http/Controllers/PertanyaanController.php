@@ -13,7 +13,8 @@ class PertanyaanController extends Controller
     public function index()
     {
         $data = Pertanyaan::latest()->paginate(5);
-        return view('index', compact('data'));
+        $hitungdata = Pertanyaan::count();
+        return view('index', compact(['data', 'hitungdata']));
     }
 
     public function create()

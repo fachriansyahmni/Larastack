@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
-    
+
+    <link rel="icon" href="{{ asset('img/laralogo.png') }}" type="image/gif" sizes="16x16">
     <link rel="stylesheet" href="{{ asset('bootstrap4/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css')}}">
