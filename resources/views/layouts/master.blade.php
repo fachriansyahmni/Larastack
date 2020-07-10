@@ -71,7 +71,7 @@
         <!-- /footer content -->
       </div>
     </div>
-
+    @stack('scripts')
     <!-- jQuery -->
     <script src="{{asset('/asset/vendors/jquery/dist/jquery.min.js')}}"></script>
     <!-- Bootstrap -->
@@ -90,6 +90,6 @@
 
     <script src="{{ asset('sweetalert2/sweetalert2.js') }}"></script>
 
-    @stack('scripts')
+    
   </body>
 </html>

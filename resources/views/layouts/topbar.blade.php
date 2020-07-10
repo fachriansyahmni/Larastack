@@ -14,6 +14,8 @@
                 <li class="list-inline-item mr-2"><a class="nav-link" href="{{ route('login') }}">{{ __('Masuk') }}</a></li>
               </ul>
               @else
+            </li>
+          </ul>
               <div class="dropdown">
                   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       {{ Auth::user()->name }}
