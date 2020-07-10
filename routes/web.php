@@ -29,3 +29,4 @@ Route::post('/jawaban/{pertanyaan_id}', 'JawabanController@store')->name('store-
 Route::post('/komentar/{id}', 'KomentarController@store')->name('store-comment');
 
 Route::post('/vote/jawaban', 'VoteJawabanController@vote')->name('vote-jawaban');
+Route::post('/vote/pertanyaan', 'VotePertanyaanController@vote')->name('vote-pertanyaan');

@@ -94,6 +94,7 @@
 
     <!-- Custom Theme Scripts -->
     <script src="{{asset('/asset/build/js/custom.min.js')}}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
     <script src="{{ asset('bootstrap4/js/bootstrap.min.js') }}"></script>
 
     <script src="{{ asset('sweetalert2/sweetalert2.js') }}"></script>

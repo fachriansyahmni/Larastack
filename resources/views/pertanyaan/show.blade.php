@@ -32,9 +32,30 @@
         <div class="row mt-4 mb-5">
             <div class="col-lg-2 text-center">
                 <div class="col">
-                    <a href="#" class="vote-pertanyaan">
+                @guest
+                    <button type="button" onclick="cek()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
+                @else
+                <form action="{{ route('vote-pertanyaan') }}" method="POST">
+                    @csrf
+                    <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
+                    <input type="hidden" value="1" name="vote">
+                    {{-- @if($cekvote->isEmpty())
+                        <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                    @else
+                        @foreach ($cekvote as $c)
+                            @if($c->user_id == Auth::user()->id && $c->pertanyaan_id == $j->id && $c->vote == 1)
+                                <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                            @elseif($c->user_id != Auth::user()->id && $c->jawaban_id != $j->id) 
+                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                            @endif
+                        @endforeach --}}
+                        <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
+                    {{-- @endif --}}
+                </form>
+                    {{-- <a href="#" class="vote-pertanyaan">
                         <button class="btn btn-gray btn-sm" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
-                    </a>
+                    </a> --}}
+                @endguest
                 </div>
                 <div class="col">
                     <h3>0</h3>
@@ -53,13 +74,13 @@
         @else
         @if($pertanyaan->User->id == Auth::user()->id)
         <div class="col-md-12 text-right">
-            <ul class="list-inline">
-                <li class="list-inline-item">
+            <ul class="list-inline" style="display: -webkit-inline-box;">
+                <li>
                     <a href="{{ route('edit-question',['id' => $pertanyaan->id]) }}">
                         <button class="btn btn-outline-warning btn-sm">Edit</button>
                     </a>
                 </li>
-                <li class="list-inline-item">
+                <li>
                     <form action="{{ route('delete-question',['id' => $pertanyaan->id]) }}" method="POST">
                         @csrf
                         @method('delete')
@@ -79,11 +100,6 @@
                         <button type="button" onclick="cek()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
                         @else
                         @php
-                            // $cekvote = DB::table('votejawaban')->whereExists(function ($query) {
-                            //                                                         $query->select(DB::raw(1))
-                            //                                                                 ->from('users')
-                            //                                                                 ->whereRaw('users.id = votejawaban.user_id');
-                            //                                                     })->get();
                             $cekvote = DB::table('votejawaban')->join('users','users.id','=','votejawaban.user_id')->get();
                             $result = $cekvote->count();
                         @endphp
@@ -92,14 +108,16 @@
                             <input type="hidden" value="{{ $j->id }}" name="jawaban_id" >
                             <input type="hidden" value="1" name="vote">
                             @if($cekvote->isEmpty())
-                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                                <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
                             @else
-                        @foreach ($cekvote as $c)
-                            @if($c->user_id == Auth::user()->id && $c->jawaban_id == $j->id)
-                                <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                            @endif
-                        @endforeach
-                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                                @foreach ($cekvote as $c)
+                                    @if($c->user_id == Auth::user()->id && $c->jawaban_id == $j->id && $c->vote == 1)
+                                        <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                                    @elseif($c->user_id != Auth::user()->id && $c->jawaban_id != $j->id) 
+                                    <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                                    @endif
+                                @endforeach
+                                <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
                             @endif
                         </form>
                         
@@ -124,7 +142,7 @@
                     @else
                     @if($pertanyaan->User->id == Auth::user()->id)
                     <div class="col mt-3">
-                        <button class="btn btn-success disabled" data-toggle="tooltip" data-placement="right" title="Jawaban ini paling tepat">Ya</button>
+                        <button class="btn btn-outline-success disabled" data-toggle="tooltip" data-placement="right" title="Jawaban ini paling tepat">Jadikan Jawaban Yang Terbaik</button>
                     </div>
                     @endif
                     @endguest
@@ -136,7 +154,7 @@
                      <p>{!! html_entity_decode($str) !!}</p>
                 </div>
                 <div class="col-12 mb-3 my-4">
-                <footer class="blockquote-footer text-right">by <cite title="Source Title">
+                <div class="blockquote-footer text-right">by <cite title="Source Title">
                     @php
                         $nama = DB::table('users')->join('jawaban','jawaban.user_id','=','users.id')->where('jawaban.id',$j->id)->get();
                     @endphp
@@ -144,7 +162,7 @@
                         {{$n->name}}<br>
                         {{$n->created_at}}
                     @endforeach
-                    </cite> </footer>
+                    </cite> </div>
                 <a href="{{ route('answer',$j->id) }}" class="text-decoration-none text-muted"><i>add a comment</i></a>
                      <hr>
                 </div>
