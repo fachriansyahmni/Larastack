@@ -51,22 +51,16 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-          <div class="">
-            <div class="page-title">
               <div class="container">
                 <div class="top mt-2 text-center">
                     <h1><b>Lara</b>Stack</h1>
                 </div>
-                  
-            
                 <div class="col-sm-12 col-md-12 col-lg mx-auto">
                     <div class="row">
                         @yield('content')
                     </div>
                 </div>
             </div>
-            </div>
-          </div>
         </div>
         <!-- /page content -->
 

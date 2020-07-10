@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Jawaban;
+use App\KomentarJawaban;
 use Auth;
 
 class JawabanController extends Controller
@@ -11,7 +12,9 @@ class JawabanController extends Controller
     public function index($pertanyaan_id)
     {
         $jawaban = Jawaban::find($pertanyaan_id);
-        return view('jawaban.index', compact(['jawaban']));
+        $komentars = KomentarJawaban::where('jawaban_id', $jawaban->id)->get();
+        $totalkomentar = $komentars->count();
+        return view('jawaban.index', compact(['jawaban', 'komentars', 'totalkomentar']));
     }
 
     public function store(Request $request)

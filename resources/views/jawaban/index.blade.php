@@ -27,8 +27,25 @@
         </div>
         <hr>
         <div class="row mt-3 mb-5">
-                Komentar (0)
+            <p class="col-12">
+                Komentar ({{$totalkomentar}})
+            </p>
             {{-- Total Komentar --}}
+            @foreach ($komentars as $k)
+            <div class="col-lg-2 col-sm-2">
+            </div>
+            <div class="col-lg-10 col-sm-10">
+                @php
+                    $komen = strip_tags($k->komentar, '');
+                    $peoples = DB::table('users')->join('komentar_jawaban','komentar_jawaban.user_id','=','users.id')->where('komentar_jawaban.id',$jawaban->id)->get();
+                @endphp
+                     <p>
+                        <b>@foreach ($peoples as $nama)
+                            {{$nama->name}}
+                        @endforeach</b> @ {!! html_entity_decode($komen) !!}</p>
+                     <hr>
+            </div>
+            @endforeach
             <div class="col-lg-12 mt-5">
                 <form action="{{ route('store-comment',['id' => $jawaban->id ]) }}" method="POST">
                     @csrf
@@ -38,7 +55,11 @@
                         <textarea id="komentar" name="komentar"></textarea>
                     </div>
                     <div class="form-group">
+                        @guest
+                            <button type="button" onclick="cek()"  class="btn btn-primary">Post</button>
+                        @else
                         <button type="submit" class="btn btn-primary">Post</button>
+                        @endguest
                     </div>
                 </form>
                 {{-- Forn Komentar --}}
@@ -58,5 +79,14 @@
                 .catch( error => {
                             console.error( error );
                      } );
+        
+        function cek(){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Login dulu!',
+                footer: '<a href=/login>Login</a>'
+                })
+        }
     </script>
 @endpush
