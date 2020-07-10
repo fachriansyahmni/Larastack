@@ -11,11 +11,11 @@
                     @csrf
                     <div class="form-group">
                       <label for="judul">Judul</label>
-                      <input type="text" class="form-control col-sm-4" id="judul" name="judul" maxlength="120">
+                      <input type="text" class="form-control" id="judul" name="judul" maxlength="120" style="max-width: 90%">
                     </div>
                     <div class="form-group">
                       <label for="tag">Tag</label>
-                      <textarea class="form-control col-6" id="tag" name="tag" rows="1" placeholder="ex: komputer, elektronik, game"></textarea>
+                      <textarea class="form-control" id="tag" name="tag" rows="1" placeholder="ex: komputer, elektronik, game" style="max-width: 440px"></textarea>
                     </div>
                     <div class="form-group">
                       <label for="isi">Isi</label>

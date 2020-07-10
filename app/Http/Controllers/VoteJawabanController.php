@@ -7,6 +7,7 @@ use App\Vote_Jawaban;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Profile;
 
 class VoteJawabanController extends Controller
 {
@@ -28,16 +29,24 @@ class VoteJawabanController extends Controller
             return "/";
         }
         $data->save();
-        $repuser = Jawaban::find($request->jawaban_id);
+        $votepenjawab = Jawaban::find($request->jawaban_id);
+        $repuserpenjawab = Profile::where('user_id', $votepenjawab->user_id)->first();
+        $userpemberivote = Profile::where('user_id', Auth::user()->id)->first();
         if ($request->vote == 0) {
-            $data = $repuser->vote - 1;
+            $data = $votepenjawab->vote - 1;
+            $sendvoter = $userpemberivote->reputation - 1;
+            $userpemberivote->reputation = $sendvoter;
+            $userpemberivote->update();
         } elseif ($request->vote == 1) {
-            $data = $repuser->vote + 1;
+            $data = $votepenjawab->vote + 1;
+            $repjawab = $repuserpenjawab->reputation + 10;
+            $repuserpenjawab->reputation = $repjawab;
+            $repuserpenjawab->update();
         } else {
             return "/";
         }
-        $repuser->vote = $data;
-        $repuser->update();
-        return redirect('/pertanyaan/' . $repuser->pertanyaan_id);
+        $votepenjawab->vote = $data;
+        $votepenjawab->update();
+        return redirect('/pertanyaan/' . $votepenjawab->pertanyaan_id);
     }
 }

@@ -18,6 +18,7 @@ class CreatePertanyaan extends Migration
             $table->string('judul', 120);
             $table->longText('isi');
             $table->string('tag');
+            $table->string('vote')->default(0);
             $table->timestamps();
         });
     }

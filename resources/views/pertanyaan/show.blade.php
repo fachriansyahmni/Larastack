@@ -16,7 +16,12 @@
             <div class="col-md-12">
                 <h1><b>{{ $pertanyaan->judul}} </b></h1>
             </div>
-            <div class="col-md-12 mb-2">Asked {{ $pertanyaan->created_at }}, Updated {{ $pertanyaan->updated_at }} by <b>{{ $pertanyaan->User->name}}</b></div>
+            <div class="col-md-12 mb-2">Asked {{ $pertanyaan->created_at }}<br>
+                @if($pertanyaan->updated_at != $pertanyaan->created_at )
+                <mark>Updated {{ $pertanyaan->updated_at }} </mark>
+                @endif
+                <p class="text-right">by <b>{{ $pertanyaan->User->name}}</b></p>
+            </div>
             <div class="col-md-12 mb-2" style="text-align: right;">
                 <small>
                     @foreach (explode(',',$pertanyaan->tag) as $tag)
@@ -35,6 +40,9 @@
                 @guest
                     <button type="button" onclick="cek()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
                 @else
+                @if($pertanyaan->User->id == Auth::user()->id)
+                  <button type="button" onclick="votepertanyaan()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
+                @else 
                 <form action="{{ route('vote-pertanyaan') }}" method="POST">
                     @csrf
                     <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
@@ -52,18 +60,45 @@
                         <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
                     {{-- @endif --}}
                 </form>
-                    {{-- <a href="#" class="vote-pertanyaan">
-                        <button class="btn btn-gray btn-sm" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
-                    </a> --}}
+                @endif
                 @endguest
                 </div>
                 <div class="col">
-                    <h3>0</h3>
+                    <h3>{{$pertanyaan->vote}}</h3>
                 </div>
                 <div class="col">
-                    <a href="#" class="vote-pertanyaan">
-                        <button class="btn btn-gray btn-sm" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
-                    </a>
+                    @guest
+                    <button type="button" onclick="cek()" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                    @else
+                    @if($pertanyaan->User->id == Auth::user()->id)
+                    <button type="button" onclick="votepertanyaan()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                    @else 
+                    @php
+                        $cekrep = App\Profile::where('user_id', Auth::user()->id)->first();
+                    @endphp
+                    @if($cekrep->reputation < 15)
+                    <button type="button" onclick="validasirep()" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                    @else
+                    <form action="{{ route('vote-pertanyaan') }}" method="POST">
+                        @csrf
+                        <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
+                        <input type="hidden" value="0" name="vote">
+                        {{-- @if($cekvote->isEmpty())
+                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                        @else
+                            @foreach ($cekvote as $c)
+                                @if($c->user_id == Auth::user()->id && $c->pertanyaan_id == $j->id && $c->vote == 1)
+                                    <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                                @elseif($c->user_id != Auth::user()->id && $c->jawaban_id != $j->id) 
+                                <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                                @endif
+                            @endforeach --}}
+                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                        {{-- @endif --}}
+                    </form>
+                    @endif
+                    @endif
+                    @endguest
                 </div>
             </div>
             <div class="col-lg-10 mb-4">
@@ -89,6 +124,10 @@
                 </li>
             </ul>
         </div>
+        
+        <p class="mb-5">
+            <a href="#" class="text-decoration-none text-muted"><i>add a comment</i></a>
+        </p>
         @endif
         @endguest
             Answer ({{$totaljwbn}})
@@ -142,7 +181,7 @@
                     @else
                     @if($pertanyaan->User->id == Auth::user()->id)
                     <div class="col mt-3">
-                        <button class="btn btn-outline-success disabled" data-toggle="tooltip" data-placement="right" title="Jawaban ini paling tepat">Jadikan Jawaban Yang Terbaik</button>
+                        <button class="btn btn-outline-success disabled" data-toggle="tooltip" data-placement="right" title="Tetapkan Jawaban Terbaik">Jadikan Jawaban Yang Terbaik</button>
                     </div>
                     @endif
                     @endguest
@@ -207,6 +246,19 @@
                 title: 'Oops...',
                 text: 'Login dulu!',
                 footer: '<a href=/login>Login</a>'
+                })
+        }
+        function votepertanyaan(){
+            Swal.fire({
+                icon: 'error',
+                title: 'Tidak bisa memberi vote pada pertanyaan sendiri'
+                })
+        }
+        function validasirep(){
+            Swal.fire({
+                icon: 'error',
+                title: 'Tidak Bisa Downvote',
+                text: 'Minimal Downvote Reputasi Harus Minimal 15 Poin'
                 })
         }
     </script>
