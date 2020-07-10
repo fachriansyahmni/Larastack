@@ -30,7 +30,7 @@
                 <p>
                     <samp>Nama Saya <u>{{ $data->name }}</u>.</samp><br>
                     <samp>Nama Lengkap Saya <u>{{ $data->nama_lengkap }}</u>- .</samp><br>
-                    <samp>Saya memiliki reputasi {{$data->reputation}}.</samp>
+                    <samp>Saya memiliki reputasi {{$data->reputation}} poin.</samp>
                     <form action="" method="post">
                         @csrf
                     </form>

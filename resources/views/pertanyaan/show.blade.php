@@ -43,6 +43,12 @@
                 @if($pertanyaan->User->id == Auth::user()->id)
                   <button type="button" onclick="votepertanyaan()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
                 @else 
+                @php
+                     $cekvotepertanyaan = DB::table('votepertanyaan')->join('users','users.id','=','votepertanyaan.user_id')
+                                    ->where(['votepertanyaan.user_id' => Auth::user()->id, 'votepertanyaan.pertanyaan_id' => $pertanyaan->id])->first();
+                    // dd($cekvotepertanyaan);
+                @endphp
+                @if($cekvotepertanyaan == null)
                 <form action="{{ route('vote-pertanyaan') }}" method="POST">
                     @csrf
                     <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
@@ -60,6 +66,28 @@
                         <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
                     {{-- @endif --}}
                 </form>
+                @elseif($cekvotepertanyaan->vote == 1)
+                    <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
+                @elseif($cekvotepertanyaan->vote == 0) 
+                <form action="{{ route('vote-pertanyaan') }}" method="POST">
+                    @csrf
+                    <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
+                    <input type="hidden" value="1" name="vote">
+                    {{-- @if($cekvote->isEmpty())
+                        <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                    @else
+                        @foreach ($cekvote as $c)
+                            @if($c->user_id == Auth::user()->id && $c->pertanyaan_id == $j->id && $c->vote == 1)
+                                <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                            @elseif($c->user_id != Auth::user()->id && $c->jawaban_id != $j->id) 
+                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                            @endif
+                        @endforeach --}}
+                        <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
+                    {{-- @endif --}}
+                </form>
+                @endif
+                
                 @endif
                 @endguest
                 </div>
@@ -258,7 +286,7 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Tidak Bisa Downvote',
-                text: 'Minimal Downvote Reputasi Harus Minimal 15 Poin'
+                text: 'Downvote Harus Memiliki Reputasi Minimal 15 Poin'
                 })
         }
     </script>
