@@ -17,4 +17,23 @@ class HomeController extends Controller
         $data = DB::table('users')->join('profile', 'users.id', '=', 'profile.user_id')->where('users.id', Auth::user()->id)->first();
         return view('profile.index', compact('data'));
     }
+    public function edit()
+    {
+        $data = DB::table('users')->join('profile', 'users.id', '=', 'profile.user_id')->where('users.id', Auth::user()->id)->first();
+        return view('profile.edit', compact('data'));
+    }
+
+    public function update($user_id, Request $request){
+        
+        $jawaban = DB::table('profile')
+                        ->where('user_id', $user_id)
+                        ->update([
+                            'nama_lengkap' => $request->nama_lengkap,
+                            'user_id' => $request->user_id,
+                            'gender'=>$request->gender,
+                            'tanggal_lahir'=>$request->tanggal_lahir
+                        ]);
+        // dd($jawaban);
+        return redirect('/home');
+    }
 }

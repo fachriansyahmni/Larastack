@@ -67,14 +67,14 @@
         <!-- footer content -->
         <footer>
           <div class="pull-right">
-            LaraStack by <a href="">Kelompok 83</a>
+            <mark><b>Lara</b>Stack</mark> by <a href=""><em>Kelompok 83</em></a>
           </div>
           <div class="clearfix"></div>
         </footer>
         <!-- /footer content -->
       </div>
     </div>
-
+    @stack('scripts')
     <!-- jQuery -->
     <script src="{{asset('/asset/vendors/jquery/dist/jquery.min.js')}}"></script>
     <!-- Bootstrap -->
@@ -93,6 +93,6 @@
 
     <script src="{{ asset('sweetalert2/sweetalert2.js') }}"></script>
 
-    @stack('scripts')
+    
   </body>
 </html>

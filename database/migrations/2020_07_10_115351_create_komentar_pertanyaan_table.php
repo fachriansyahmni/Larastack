@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfile extends Migration
+class CreateKomentarPertanyaanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateProfile extends Migration
      */
     public function up()
     {
-        Schema::create('profile', function (Blueprint $table) {
-            $table->string('nama_lengkap')->nullable();
-            $table->string('gender')->nullable();
-            $table->date('tanggal_lahir')->nullable();
-            $table->integer('reputation')->default(0);
+        Schema::create('komentar_pertanyaan', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->longText('isi');
+            $table->timestamps();
         });
     }
 
@@ -28,6 +27,6 @@ class CreateProfile extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profile');
+        Schema::dropIfExists('komentar_pertanyaan');
     }
 }

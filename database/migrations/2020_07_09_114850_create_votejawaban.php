@@ -15,8 +15,6 @@ class CreateVotejawaban extends Migration
     {
         Schema::create('votejawaban', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
-            $table->integer('jawaban_id');
             $table->boolean('vote');
         });
     }

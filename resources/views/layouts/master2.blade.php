@@ -19,9 +19,9 @@
             <a class="navbar-brand"></a>
             <div class="form-inline">
                 @guest
-                <a class="nav-link" href="{{ route('login') }}">{{ __('Masuk') }}</a>
+                <a class="nav-link btn btn-primary btn-sm" href="{{ route('login') }}">{{ __('Masuk') }}</a>
                 @if (Route::has('register'))
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Daftar') }}</a>
+                <a class="nav-link btn btn-warning btn-sm" href="{{ route('register') }}">{{ __('Daftar') }}</a>
                         @endif
                 @else
                 <div class="dropdown">
