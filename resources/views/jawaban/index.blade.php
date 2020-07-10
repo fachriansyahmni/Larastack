@@ -42,8 +42,12 @@
                      <p>
                         <b>@foreach ($peoples as $nama)
                             {{$nama->name}}
-                        @endforeach</b> @ {!! html_entity_decode($komen) !!}</p>
-                     <hr>
+                        @endforeach</b>@ {!! html_entity_decode($komen) !!}
+                    </p>
+                    <div class="col text-right">
+                        <small>{{ $k->created_at }}</small>
+                    </div>
+                    <hr style="margin-top: 1px; margin-bottom:1px;">
             </div>
             @endforeach
             <div class="col-lg-12 mt-5">

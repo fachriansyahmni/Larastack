@@ -52,9 +52,6 @@
         <!-- page content -->
         <div class="right_col" role="main">
               <div class="container">
-                <div class="top mt-2 text-center">
-                    <h1><b>Lara</b>Stack</h1>
-                </div>
                 <div class="col-sm-12 col-md-12 col-lg mx-auto">
                     <div class="row">
                         @yield('content')
@@ -67,7 +64,7 @@
         <!-- footer content -->
         <footer>
           <div class="pull-right">
-            LaraStack by <a href="">Kelompok 83</a>
+            LaraStack by <a href="#">Kelompok 83</a>
           </div>
           <div class="clearfix"></div>
         </footer>

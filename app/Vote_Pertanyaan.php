@@ -10,4 +10,5 @@ class Vote_Pertanyaan extends Model
     protected $fillable = [
         'user_id', 'pertanyaan_id', 'vote',
     ];
+    public $timestamps = false;
 }

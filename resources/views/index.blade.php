@@ -15,16 +15,18 @@
         <div class="card mb-5 p-2">
             <div class="row no-gutters">
                 <div class="col-md-3 text-center" style="align-self: center">
+                        @php
+                            $totalvote = App\Pertanyaan::where(['id' => $p->id])->get();
+                            $totaljwbn = App\Jawaban::where('pertanyaan_id', $p->id)->count();
+                        @endphp
                         <div class="col-lg-12 col-md-6">
-                            <h3>0</h3>
+                            <h3>@foreach ($totalvote as $tv)
+                                {{$tv->vote}}
+                            @endforeach</h3>
                             <small>votes</small>
                         </div>
                         <div class="col-lg-12 col-md-6 mt-2">
-                            @php
-                                $totaljwbn = App\Jawaban::where('pertanyaan_id', $p->id)->count()
-                            @endphp
-                            <h3>
-                                {{$totaljwbn}}</h3>
+                            <h3>{{$totaljwbn}}</h3>
                             <small>answer</small>
                         </div>
                 </div>
