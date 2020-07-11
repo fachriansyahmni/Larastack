@@ -97,29 +97,48 @@
         </div>
         @guest
         @else
-        @if($pertanyaan->User->id == Auth::user()->id)
-        <div class="col-md-12 text-right">
-            <ul class="list-inline" style="display: -webkit-inline-box;">
-                <li>
-                    <a href="{{ route('edit-question',['id' => $pertanyaan->id]) }}">
-                        <button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit Pertanyaan"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                    </a>
-                </li>
-                <li>
-                    <form action="{{ route('delete-question',['id' => $pertanyaan->id]) }}" method="POST">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Hapus Pertanyaan"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    </form>
-                </li>
-            </ul>
-        </div>
-        
-        <p class="mb-5">
-            <a href="#" class="text-decoration-none text-muted"><i>add a comment</i></a>
-        </p>
-        @endif
+            @if($pertanyaan->User->id == Auth::user()->id)
+            <div class="col-md-12 text-right">
+                <ul class="list-inline" style="display: -webkit-inline-box;">
+                    <li>
+                        <a href="{{ route('edit-question',['id' => $pertanyaan->id]) }}">
+                            <button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit Pertanyaan"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                        </a>
+                    </li>
+                    <li>
+                        <form action="{{ route('delete-question',['id' => $pertanyaan->id]) }}" method="POST">
+                            @csrf
+                            @method('delete')
+                            <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Hapus Pertanyaan"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            @endif
         @endguest
+        <div class="col-lg-2 col-sm-2">
+        </div>
+        <div class="col-lg-10 col-sm-10">
+            <small>
+                @php
+                    $komentarpertanyaan = App\KomentarPertanyaan::where('pertanyaan_id',$pertanyaan->id)->latest()->paginate(5);
+                @endphp
+                @if ($komentarpertanyaan->count() > 0)
+                    <hr class="mt-1 mb-1">
+                    @foreach ($komentarpertanyaan as $kp)
+                        @php
+                            $komen = strip_tags($kp->isi, '<b>');
+                            $peoples = DB::table('users')->join('komentar_pertanyaan','komentar_pertanyaan.user_id','=','users.id')->where('komentar_pertanyaan.user_id',$kp->user_id)->first();
+                        @endphp
+                        {!! html_entity_decode(\Illuminate\Support\Str::limit($komen, 100, $end='...')) !!} - <cite title="Source Title">{{$peoples->name}} {{ $kp->created_at }}</cite>
+                        <hr class="mt-1 mb-1">
+                    @endforeach
+                @endif
+            </small>
+        </div>
+        <p class="mb-5">
+            <a href="{{route('comments-question',['id' => $pertanyaan->id])}}" class="text-decoration-none text-muted"><i>add a comment</i></a>
+        </p>
             Answer ({{$totaljwbn}})
         <div class="row mt-3">
             @foreach ($jawaban as $j)
@@ -162,7 +181,7 @@
                                     $cekrep = App\Profile::where('user_id', Auth::user()->id)->first();
                                 @endphp
                                 @if($cekrep->reputation < 15)
-                                 <button onclick="validasirep()" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                                 <button onclick="validasirep()" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
                                 @else
                                     @if($cekvotejawaban == null || $cekvotejawaban->vote == 1)
                                         <form class="vote" action="{{ route('vote-jawaban') }}" method="POST">
@@ -172,7 +191,7 @@
                                             <button type="submit" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
                                         </form>
                                     @elseif($cekvotejawaban->vote == 0)
-                                        <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>   
+                                        <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>   
                                     @endif
                                 @endif
                             @endif
@@ -194,9 +213,12 @@
                     @if($j->is_best == 1)
                         <button class="btn btn-lg" data-toggle="tooltip" data-placement="right" title="Jawaban Terbaik"><i class="fa fa-check text-success"></i></button>
                         <br>
+                        @guest
+                        @else
                         @if($pertanyaan->User->id == Auth::user()->id)
                             <button class="btn btn-sm btn-outline-danger disabled" data-toggle="tooltip" data-placement="right" title="Batalkan Jawaban Terbaik"><small>Batalkan Menjadi Jawaban Terbaik</small></button>
                         @endif
+                        @endguest
                     @endif  
                 </div>
                 <div class="col-lg-10 col-sm-10 mb-2">
@@ -215,6 +237,26 @@
                         {{$n->created_at}}
                     @endforeach
                     </cite> 
+                </div>
+                <div class="col-lg-2 col-sm-2">
+                </div>
+                <div class="col-lg-10 col-sm-10">
+                    <small>
+                        @php
+                            $komentarjawaban = App\KomentarJawaban::where('jawaban_id',$j->id)->latest()->paginate(5);
+                        @endphp
+                        @if ($komentarjawaban->count() > 0)
+                            <hr class="mt-1 mb-1">
+                            @foreach ($komentarjawaban as $kj)
+                                @php
+                                    $komen2 = strip_tags($kj->isi, '<b>');
+                                    $peoples2 = DB::table('users')->join('komentar_jawaban','komentar_jawaban.user_id','=','users.id')->where('komentar_jawaban.user_id',$kj->user_id)->first();
+                                @endphp
+                                {!! html_entity_decode(\Illuminate\Support\Str::limit($komen2, 100, $end='...')) !!} - <cite title="Source Title">{{$peoples->name}} {{ $kj->created_at }}</cite>
+                                <hr class="mt-1 mb-1">
+                            @endforeach
+                        @endif
+                    </small>
                 </div>
                     <a href="{{ route('answer',$j->id) }}" class="text-decoration-none text-muted"><i>add a comment</i></a>
                      <hr>

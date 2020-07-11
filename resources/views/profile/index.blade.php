@@ -33,7 +33,6 @@
                     @csrf
                 </form>
               </p>
-              <a href="#" class="btn btn-primary">Back</a>
               <a href="{{route('edit-home',['id' => $data->user_id])}}" class="btn btn-primary">Edit</a>
             </div>
           </div>

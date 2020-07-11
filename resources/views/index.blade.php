@@ -53,6 +53,9 @@
           </div>
         @endforeach
     </div>
+            <div class="text-center">
+                {{$data->links()}}
+            </div>
 
 @guest
 @else
