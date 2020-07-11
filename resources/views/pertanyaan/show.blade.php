@@ -102,14 +102,14 @@
             <ul class="list-inline" style="display: -webkit-inline-box;">
                 <li>
                     <a href="{{ route('edit-question',['id' => $pertanyaan->id]) }}">
-                        <button class="btn btn-outline-warning btn-sm">Edit</button>
+                        <button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit Pertanyaan"><i class="fa fa-edit" aria-hidden="true"></i></button>
                     </a>
                 </li>
                 <li>
                     <form action="{{ route('delete-question',['id' => $pertanyaan->id]) }}" method="POST">
                         @csrf
                         @method('delete')
-                        <button class="btn btn-danger btn-sm">Hapus</button>
+                        <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Hapus Pertanyaan"><i class="fa fa-trash" aria-hidden="true"></i></button>
                     </form>
                 </li>
             </ul>
@@ -193,6 +193,10 @@
                     @endguest
                     @if($j->is_best == 1)
                         <button class="btn btn-lg" data-toggle="tooltip" data-placement="right" title="Jawaban Terbaik"><i class="fa fa-check text-success"></i></button>
+                        <br>
+                        @if($pertanyaan->User->id == Auth::user()->id)
+                            <button class="btn btn-sm btn-outline-danger disabled" data-toggle="tooltip" data-placement="right" title="Batalkan Jawaban Terbaik"><small>Batalkan Menjadi Jawaban Terbaik</small></button>
+                        @endif
                     @endif  
                 </div>
                 <div class="col-lg-10 col-sm-10 mb-2">
@@ -210,13 +214,14 @@
                         {{$n->name}}<br>
                         {{$n->created_at}}
                     @endforeach
-                    </cite> </div>
-                <a href="{{ route('answer',$j->id) }}" class="text-decoration-none text-muted"><i>add a comment</i></a>
+                    </cite> 
+                </div>
+                    <a href="{{ route('answer',$j->id) }}" class="text-decoration-none text-muted"><i>add a comment</i></a>
                      <hr>
                 </div>
             @endforeach
             <div class="col-lg-12">
-            <form action="{{ route('store-answer',['pertanyaan_id' => $pertanyaan->id ]) }}" method="POST">
+                <form action="{{ route('store-answer',['pertanyaan_id' => $pertanyaan->id ]) }}" method="POST">
                     @csrf
                     <input type="text" value="{{$pertanyaan->id}}" name="id_pertanyaan" hidden>
                     <div class="form-group">

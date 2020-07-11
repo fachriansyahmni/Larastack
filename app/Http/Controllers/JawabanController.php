@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Jawaban;
 use App\KomentarJawaban;
+use App\Profile;
 use Auth;
 
 class JawabanController extends Controller
@@ -34,8 +35,11 @@ class JawabanController extends Controller
     public function best_aswer(Request $request)
     {
         $data = Jawaban::where('id', $request->id_jawaban)->first();
+        $data2 = Profile::where('user_id', $data->user_id)->first();
+        $data2->reputation = $data2->reputation + 15;
         $data->is_best = 1;
         $data->update();
+        $data2->update();
 
         return redirect()->back();
     }
