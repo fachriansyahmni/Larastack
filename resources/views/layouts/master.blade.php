@@ -64,7 +64,7 @@
         <!-- footer content -->
         <footer>
           <div class="pull-right">
-            LaraStack by <a href="#">Kelompok 83</a>
+            <mark><b>Lara</b>Stack</mark> by <a href="#">Kelompok 83</a>
           </div>
           <div class="clearfix"></div>
         </footer>
