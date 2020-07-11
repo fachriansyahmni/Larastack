@@ -23,6 +23,11 @@
 
     <!-- Custom Theme Style -->
     <link href="{{asset('/asset/build/css/custom.min.css')}}" rel="stylesheet">
+    <style>
+      .ck-editor__editable_inline {
+          min-height: 100px;
+      }
+    </style>
   </head>
 
   <body class="nav-md">
@@ -31,7 +36,7 @@
         <div class="col-md-3 left_col menu_fixed">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="{{ route('question') }}" class="site_title"><i class="fa fa-bug"></i> <span><b>Lara</b>Stack</span></a>
+              <a href="{{ url('/') }}" class="site_title"><i class="fa fa-bug"></i> <span><b>Lara</b>Stack</span></a>
             </div>
 
             <div class="clearfix"></div>

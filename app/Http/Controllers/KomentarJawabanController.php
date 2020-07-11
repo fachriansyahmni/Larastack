@@ -18,7 +18,6 @@ class KomentarJawabanController extends Controller
             'jawaban_id' => $request->id_jawaban,
             'user_id' => Auth::user()->id,
         ]);
-        // dd($request->id_jawaban);
         $data->save();
         return redirect('/jawaban/' . $request->id_jawaban)->with('success', 'Behasil Di Submit');
     }
