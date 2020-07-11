@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Pertanyaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,8 @@ class HomeController extends Controller
     public function index()
     {
         $data = DB::table('users')->join('profile', 'users.id', '=', 'profile.user_id')->where('users.id', Auth::user()->id)->first();
-        return view('profile.index', compact('data'));
+        $pertanyaan = Pertanyaan::where('penanya_id', $data->id)->get();
+        return view('profile.index', compact('data', 'pertanyaan'));
     }
     public function edit()
     {

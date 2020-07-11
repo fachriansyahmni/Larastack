@@ -13,6 +13,8 @@ Route::get('/pertanyaan/{id}', 'PertanyaanController@show')->name('question-deta
 Route::get('/pertanyaan/{id}/edit', 'PertanyaanController@edit')->name('edit-question')->middleware('auth');
 Route::put('/pertanyaan/{id}', 'PertanyaanController@update')->name('update-question');
 Route::delete('/pertanyaan/{id}', 'PertanyaanController@delete')->name('delete-question');
+Route::get('/pertanyaan/komentar/{id}', 'PertanyaanController@komentar')->name('comments-question');
+Route::post('/pertanyaan/komentar/{id}', 'PertanyaanController@store_comment')->name('store-comment-pertanyaan');
 
 Route::get('/jawaban/{pertanyaan_id}', 'JawabanController@index')->name('answer');
 Route::post('/jawaban/{pertanyaan_id}', 'JawabanController@store')->name('store-answer');

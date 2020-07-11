@@ -49,7 +49,7 @@
                                 $cekrep = App\Profile::where('user_id', Auth::user()->id)->first();
                             @endphp
                             @if($cekrep->reputation < 15)
-                            <button onclick="validasirep()" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                            <button onclick="validasirep()" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
                             @else
                                 @if($cekvotejawaban == null || $cekvotejawaban->vote == 1)
                                     <form class="vote" action="{{ route('vote-jawaban') }}" method="POST">
@@ -59,11 +59,15 @@
                                         <button type="submit" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
                                     </form>
                                 @elseif($cekvotejawaban->vote == 0)
-                                    <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>   
+                                    <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>   
                                 @endif
                             @endif
                         @endif
                     @endguest
+                    @if ($jawaban->is_best == 1)
+                    <br>
+                        <button class="btn btn-lg" data-toggle="tooltip" data-placement="right" title="Jawaban Terbaik"><i class="fa fa-check text-success"></i></button>
+                    @endif
                 </div>
             </div>
             <div class="col-lg-10 mb-4">

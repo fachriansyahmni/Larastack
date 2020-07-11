@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Pertanyaan;
 use App\Jawaban;
+use App\KomentarPertanyaan;
 use Illuminate\Support\Facades\Auth;
 use DB;
 
@@ -37,13 +38,13 @@ class PertanyaanController extends Controller
             'tag' => implode(",", $tags)
         ]);
         $data->save();
-        return redirect('/pertanyaan')->with('success', 'Pertanyaan Behasil Di Submit');
+        return redirect('/pertanyaan/' . $data->id);
     }
 
     public function show($id)
     {
         if ($id == null) {
-            redirect('/');
+            return redirect('/');
         }
         $pertanyaan = Pertanyaan::find($id);
         $jawaban = DB::table('pertanyaan')->join('jawaban', 'jawaban.pertanyaan_id', '=', 'pertanyaan.id')->where(['pertanyaan.id' => $id])->get();
@@ -81,5 +82,27 @@ class PertanyaanController extends Controller
         $pertanyaan = Pertanyaan::find($id)->delete();
         $q = DB::table('jawaban')->where('pertanyaan_id', '=', $id)->delete();
         return redirect('/pertanyaan');
+    }
+
+    public function komentar($id)
+    {
+        $data = Pertanyaan::find($id);
+        $komentars = KomentarPertanyaan::where('pertanyaan_id', $data->id)->get();
+        $totalkomentar = $komentars->count();
+        return view('pertanyaan.komentar', compact(['data', 'komentars', 'totalkomentar']));
+    }
+
+    public function store_comment(Request $request)
+    {
+        $request->validate([
+            'komentar' => 'required'
+        ]);
+        $data = new KomentarPertanyaan([
+            'isi' => $request->komentar,
+            'pertanyaan_id' => $request->id_pertanyaan,
+            'user_id' => Auth::user()->id,
+        ]);
+        $data->save();
+        return redirect()->back();
     }
 }
