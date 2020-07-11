@@ -95,6 +95,10 @@
 
     <script src="{{ asset('sweetalert2/sweetalert2.js') }}"></script>
 
-    
+    <script>
+      function test(){
+        $('#login').modal('toggle')
+      }
+    </script>
   </body>
 </html>
