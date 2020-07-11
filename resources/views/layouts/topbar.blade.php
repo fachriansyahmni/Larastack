@@ -25,8 +25,12 @@
               </ul>
               @else
               <div class="dropdown">
-                  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      {{ Auth::user()->name }}
+                  <button class="btn-sm dropdown-toggle btn-outline-info" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @if (!empty($data->photo))
+                    <img src="{{ asset('img/profile/'.$data->photo) }}"  width="15px" class="mr-2" alt="">{{ Auth::user()->name }}
+                    @else
+                    <img src="{{ asset('img/profile/nophoto.jpg')}}"  width="15px" class="mr-2" alt="">{{ Auth::user()->name }}
+                    @endif
                   </button>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">{{ Auth::user()->email }}</a>

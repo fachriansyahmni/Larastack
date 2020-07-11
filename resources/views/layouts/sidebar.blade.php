@@ -1,3 +1,22 @@
+<div class="profile clearfix">
+  <div class="profile_pic">
+    @if (!empty($data->photo))
+    <img src="{{ asset('img/profile/'.$data->photo) }}"  width="20px" class="img-circle profile_img">
+    @else
+    <img src="{{ asset('img/profile/nophoto.jpg')}}"  width="20px" class="img-circle profile_img">
+    @endif
+  </div>
+  <div class="profile_info">
+    <span>Welcome,</span>
+    
+      @if (!empty(Auth::user()->name))
+      
+      <h2>{{ Auth::user()->name }}</h2>
+      @endif
+      
+  </div>
+</div>
+<br />
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
     <div class="menu_section">
       <h3>General</h3>

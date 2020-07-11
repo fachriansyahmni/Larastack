@@ -18,6 +18,7 @@ class CreateProfile extends Migration
             $table->string('nama_lengkap')->nullable();
             $table->string('gender')->nullable();
             $table->date('tanggal_lahir')->nullable();
+            $table->string('photo')->nullable();
             $table->integer('reputation')->default(0);
         });
     }

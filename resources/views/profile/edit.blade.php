@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
 @php
-$ar_gender = ['Laki-Laki'=>'Laki-Laki','Perempuan'=>'P'];   
+$ar_gender = ['Laki-Laki'=>'Laki-Laki','Perempuan'=>'Perempuan'];   
 @endphp
 <div class="x_panel">
     <div class="x_title">
@@ -11,7 +11,7 @@ $ar_gender = ['Laki-Laki'=>'Laki-Laki','Perempuan'=>'P'];
     </div>
     <div class="x_content">
         <br>
-        <form class="form-label-left input_mask" action="{{ route('update-home',['id' => $data->id]) }}" method="POST">
+        <form class="form-label-left input_mask" action="{{ route('update-home',['id' => $data->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="col-md-6 col-sm-6 form-group has-feedback">
@@ -19,21 +19,9 @@ $ar_gender = ['Laki-Laki'=>'Laki-Laki','Perempuan'=>'P'];
                     <label  >Id</label>
                     <div class="input-group mb-2">
                       <div class="input-group-prepend">
-                        <div class="input-group-text"><li class="fa fa-user"></li></div>
-                      </div>
-                      <input type="text" class="form-control" id="inputSuccess3" name="user_id" value="{{$data->user_id}}">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6 col-sm-6 form-group has-feedback">
-                <div class="col-auto">
-                    <label  >Username</label>
-                    <div class="input-group mb-2">
-                      <div class="input-group-prepend">
                         <div class="input-group-text">@</div>
                       </div>
-                      <input type="text" class="form-control" id="inlineFormInputGroup" name="name" value="{{$data->name}}" >
+                      <input type="text" class="form-control" name="user_id" value="{{$data->user_id}}">
                     </div>
                 </div>
             </div>
@@ -49,20 +37,8 @@ $ar_gender = ['Laki-Laki'=>'Laki-Laki','Perempuan'=>'P'];
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-6 col-sm-6 form-group has-feedback">
-                <div class="col-auto">
-                    <label  >Email</label>
-                    <div class="input-group mb-2">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text"><li class="fa fa-envelope"></li></div>
-                      </div>
-                      <input type="email" class="form-control" id="inputSuccess4" name="email" value="{{$data->email}}">
-                    </div>
-                </div>
-            </div>
             
-            <div class="col-md-6 col-sm-6 form-group has-feedback">
+            <div class="col-md-12 form-group has-feedback">
                 <div class="col-auto">
                 <label >Tanggal Lahir</label>
                  <div class="input-group mb-2 ">
@@ -76,8 +52,11 @@ $ar_gender = ['Laki-Laki'=>'Laki-Laki','Perempuan'=>'P'];
                 <label class="col-4">Jenis Kelamin</label>
                     <div class="input-group mb-2"> 
                     @foreach($ar_gender as $label => $jk) 
+                    @php
+                        $cek = ($jk == $data->gender) ? 'checked' : '';
+                    @endphp
                         <div class="form-check form-check-inline col-md-3 col-sm-3">
-                            <input name="gender"  type="radio" 
+                            <input name="gender"  type="radio" {{$cek}}
                                     class="form-check-input" value="{{ $jk }}"> 
                             <label  class="form-check-label">{{ $label }}</label>
                         </div>
@@ -85,7 +64,13 @@ $ar_gender = ['Laki-Laki'=>'Laki-Laki','Perempuan'=>'P'];
                     </div>
                 </div>
             </div>
-            
+
+            <div class="col-md-6 col-sm-6 form-group has-feedback">
+                <label>Foto</label>
+                <br/>
+                <input type="file" class=" is-invalid " name="photo" /> 
+                <div class="invalid-feedback"></div>      
+              </div>
             <div class="form-group row">
                 
             </div>
