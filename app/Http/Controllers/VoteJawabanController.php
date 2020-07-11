@@ -13,22 +13,30 @@ class VoteJawabanController extends Controller
 {
     public function vote(Request $request)
     {
-        if ($request->vote == 0) {
-            $data = new Vote_Jawaban([
-                'user_id' => Auth::user()->id,
-                'jawaban_id' => $request->jawaban_id,
-                'vote' => 0
-            ]);
-        } elseif ($request->vote == 1) {
-            $data = new Vote_Jawaban([
-                'user_id' => Auth::user()->id,
-                'jawaban_id' => $request->jawaban_id,
-                'vote' => 1
-            ]);
+        $dbanswer = Vote_Jawaban::where(['jawaban_id' => $request->jawaban_id, 'user_id' => Auth::user()->id])->first();
+        if ($dbanswer == null) {
+            if ($request->vote == 0) {
+                $data = new Vote_Jawaban([
+                    'user_id' => Auth::user()->id,
+                    'jawaban_id' => $request->jawaban_id,
+                    'vote' => 0
+                ]);
+            } elseif ($request->vote == 1) {
+                $data = new Vote_Jawaban([
+                    'user_id' => Auth::user()->id,
+                    'jawaban_id' => $request->jawaban_id,
+                    'vote' => 1
+                ]);
+            } else {
+                return "/";
+            }
+            $data->save();
         } else {
-            return "/";
+            $data = Vote_Jawaban::where(['jawaban_id' => $request->jawaban_id, 'user_id' => Auth::user()->id])->first();
+            $data->vote = $request->vote;
+            $data->update();
         }
-        $data->save();
+
         $votepenjawab = Jawaban::find($request->jawaban_id);
         $repuserpenjawab = Profile::where('user_id', $votepenjawab->user_id)->first();
         $userpemberivote = Profile::where('user_id', Auth::user()->id)->first();
@@ -47,6 +55,6 @@ class VoteJawabanController extends Controller
         }
         $votepenjawab->vote = $data;
         $votepenjawab->update();
-        return redirect('/pertanyaan/' . $votepenjawab->pertanyaan_id);
+        return redirect()->back();
     }
 }

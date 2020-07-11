@@ -27,6 +27,7 @@ Route::delete('/pertanyaan/{id}', 'PertanyaanController@delete')->name('delete-q
 
 Route::get('/jawaban/{pertanyaan_id}', 'JawabanController@index')->name('answer');
 Route::post('/jawaban/{pertanyaan_id}', 'JawabanController@store')->name('store-answer');
+Route::put('/jawaban/best_answer', 'JawabanController@best_aswer')->name('best-answer');
 
 Route::post('/komentar/{id}', 'KomentarJawabanController@store')->name('store-comment');
 

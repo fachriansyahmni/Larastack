@@ -8,6 +8,6 @@ class KomentarJawaban extends Model
 {
     protected $table = 'komentar_jawaban';
     protected $fillable = [
-        'jawaban_id', 'user_id', 'komentar',
+        'isi', 'jawaban_id', 'user_id',
     ];
 }

@@ -43,51 +43,20 @@
                 @if($pertanyaan->User->id == Auth::user()->id)
                   <button type="button" onclick="votepertanyaan()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
                 @else 
-                @php
-                     $cekvotepertanyaan = DB::table('votepertanyaan')->join('users','users.id','=','votepertanyaan.user_id')
-                                    ->where(['votepertanyaan.user_id' => Auth::user()->id, 'votepertanyaan.pertanyaan_id' => $pertanyaan->id])->first();
-                    // dd($cekvotepertanyaan);
-                @endphp
-                @if($cekvotepertanyaan == null)
-                <form action="{{ route('vote-pertanyaan') }}" method="POST">
-                    @csrf
-                    <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
-                    <input type="hidden" value="1" name="vote">
-                    {{-- @if($cekvote->isEmpty())
-                        <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                    @else
-                        @foreach ($cekvote as $c)
-                            @if($c->user_id == Auth::user()->id && $c->pertanyaan_id == $j->id && $c->vote == 1)
-                                <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                            @elseif($c->user_id != Auth::user()->id && $c->jawaban_id != $j->id) 
-                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                            @endif
-                        @endforeach --}}
-                        <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
-                    {{-- @endif --}}
-                </form>
-                @elseif($cekvotepertanyaan->vote == 1)
-                    <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
-                @elseif($cekvotepertanyaan->vote == 0) 
-                <form action="{{ route('vote-pertanyaan') }}" method="POST">
-                    @csrf
-                    <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
-                    <input type="hidden" value="1" name="vote">
-                    {{-- @if($cekvote->isEmpty())
-                        <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                    @else
-                        @foreach ($cekvote as $c)
-                            @if($c->user_id == Auth::user()->id && $c->pertanyaan_id == $j->id && $c->vote == 1)
-                                <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                            @elseif($c->user_id != Auth::user()->id && $c->jawaban_id != $j->id) 
-                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                            @endif
-                        @endforeach --}}
-                        <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
-                    {{-- @endif --}}
-                </form>
-                @endif
-                
+                    @php
+                        $cekvotepertanyaan = DB::table('votepertanyaan')->join('users','users.id','=','votepertanyaan.user_id')
+                                        ->where(['votepertanyaan.user_id' => Auth::user()->id, 'votepertanyaan.pertanyaan_id' => $pertanyaan->id])->first();
+                    @endphp
+                    @if($cekvotepertanyaan == null || $cekvotepertanyaan->vote == 0)
+                        <form action="{{ route('vote-pertanyaan') }}" method="POST">
+                            @csrf
+                            <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
+                            <input type="hidden" value="1" name="vote">
+                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
+                        </form>
+                    @elseif($cekvotepertanyaan->vote == 1)
+                        <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini bagus">/\</button>
+                    @endif
                 @endif
                 @endguest
                 </div>
@@ -96,36 +65,29 @@
                 </div>
                 <div class="col">
                     @guest
-                    <button type="button" onclick="cek()" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                        <button type="button" onclick="cek()" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
                     @else
-                    @if($pertanyaan->User->id == Auth::user()->id)
-                    <button type="button" onclick="votepertanyaan()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
-                    @else 
-                    @php
-                        $cekrep = App\Profile::where('user_id', Auth::user()->id)->first();
-                    @endphp
-                    @if($cekrep->reputation < 15)
-                    <button type="button" onclick="validasirep()" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
-                    @else
-                    <form action="{{ route('vote-pertanyaan') }}" method="POST">
-                        @csrf
-                        <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
-                        <input type="hidden" value="0" name="vote">
-                        {{-- @if($cekvote->isEmpty())
-                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                        @else
-                            @foreach ($cekvote as $c)
-                                @if($c->user_id == Auth::user()->id && $c->pertanyaan_id == $j->id && $c->vote == 1)
-                                    <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                                @elseif($c->user_id != Auth::user()->id && $c->jawaban_id != $j->id) 
-                                <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                        @if($pertanyaan->User->id == Auth::user()->id)
+                            <button type="button" onclick="votepertanyaan()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                        @else 
+                            @php
+                                $cekrep = App\Profile::where('user_id', Auth::user()->id)->first();
+                            @endphp
+                            @if($cekrep->reputation < 15)
+                                <button type="button" onclick="validasirep()" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                            @else
+                                @if($cekvotepertanyaan == null || $cekvotepertanyaan->vote == 1)
+                                    <form action="{{ route('vote-pertanyaan') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" value="{{ $pertanyaan->id }}" name="pertanyaan_id" >
+                                        <input type="hidden" value="0" name="vote">
+                                        <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                                    </form>
+                                @elseif($cekvotepertanyaan->vote == 0)
+                                    <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>                                    
                                 @endif
-                            @endforeach --}}
-                            <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
-                        {{-- @endif --}}
-                    </form>
-                    @endif
-                    @endif
+                            @endif
+                        @endif
                     @endguest
                 </div>
             </div>
@@ -164,30 +126,26 @@
                 <div class="col-lg-2 col-sm-2 mt-2 text-center">
                     <div class="col">
                         @guest
-                        <button type="button" onclick="cek()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                            <button onclick="cek()" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
                         @else
-                        @php
-                            $cekvote = DB::table('votejawaban')->join('users','users.id','=','votejawaban.user_id')->get();
-                            $result = $cekvote->count();
-                        @endphp
-                        <form action="{{ route('vote-jawaban') }}" method="POST">
-                            @csrf
-                            <input type="hidden" value="{{ $j->id }}" name="jawaban_id" >
-                            <input type="hidden" value="1" name="vote">
-                            @if($cekvote->isEmpty())
-                                <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                            @php
+                                $cekvotejawaban = DB::table('votejawaban')->join('users','users.id','=','votejawaban.user_id')
+                                        ->where(['votejawaban.user_id' => Auth::user()->id, 'votejawaban.jawaban_id' => $j->id])->first();
+                            @endphp
+                            @if($j->user_id == Auth::user()->id)
+                                <button class="btn btn-light mb-2" onclick="votejawaban()" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
                             @else
-                                @foreach ($cekvote as $c)
-                                    @if($c->user_id == Auth::user()->id && $c->jawaban_id == $j->id && $c->vote == 1)
-                                        <button type="button" class="btn btn-primary active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                                    @elseif($c->user_id != Auth::user()->id && $c->jawaban_id != $j->id) 
+                                @if($cekvotejawaban == null || $cekvotejawaban->vote == 0)
+                                <form action="{{ route('vote-jawaban') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" value="{{ $j->id }}" name="jawaban_id" >
+                                    <input type="hidden" value="1" name="vote">
                                     <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
-                                    @endif
-                                @endforeach
-                                <button type="submit" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                                </form>
+                                @elseif($cekvotejawaban->vote == 1)
+                                    <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">/\</button>
+                                @endif
                             @endif
-                        </form>
-                        
                         @endguest
                     </div>
                     <div class="col">
@@ -195,24 +153,47 @@
                     </div>
                     <div class="col">
                         @guest
-                        <button type="button" onclick="cek()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">\/</button>
+                            <button type="button" onclick="cek()"  class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini membantu">\/</button>
                         @else
-                        <form class="vote" action="{{ route('vote-jawaban') }}" method="POST">
-                            @csrf
-                            <input type="text" value="{{ $j->id }}" name="jawaban_id" hidden>
-                            <input type="text" value="0" name="vote" hidden>
-                            <button type="submit" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
-                        </form>
+                            @if($j->user_id== Auth::user()->id)
+                                <button class="btn btn-light mb-2" onclick="votejawaban()" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
+                            @else
+                                @php
+                                    $cekrep = App\Profile::where('user_id', Auth::user()->id)->first();
+                                @endphp
+                                @if($cekrep->reputation < 15)
+                                 <button onclick="validasirep()" class="btn btn-light mb-2" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>
+                                @else
+                                    @if($cekvotejawaban == null || $cekvotejawaban->vote == 1)
+                                        <form class="vote" action="{{ route('vote-jawaban') }}" method="POST">
+                                            @csrf
+                                            <input type="text" value="{{ $j->id }}" name="jawaban_id" hidden>
+                                            <input type="text" value="0" name="vote" hidden>
+                                            <button type="submit" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Jawaban ini kurang membantu">\/</button>
+                                        </form>
+                                    @elseif($cekvotejawaban->vote == 0)
+                                        <button class="btn btn-primary mb-2 active" data-toggle="tooltip" data-placement="right" title="Pertanyaan ini kurang bagus">\/</button>   
+                                    @endif
+                                @endif
+                            @endif
                         @endguest
                     </div>
                     @guest
                     @else
-                    @if($pertanyaan->User->id == Auth::user()->id)
-                    <div class="col mt-3">
-                        <button class="btn btn-outline-success disabled" data-toggle="tooltip" data-placement="right" title="Tetapkan Jawaban Terbaik">Jadikan Jawaban Yang Terbaik</button>
-                    </div>
-                    @endif
+                        @if($pertanyaan->User->id == Auth::user()->id && $j->is_best == 0)
+                        <div class="col mt-3">
+                            <form action="{{ route('best-answer') }}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="id_jawaban" value="{{ $j->id }}">
+                                    <button type="submit" class="btn btn-outline-success disabled" data-toggle="tooltip" data-placement="right" title="Tetapkan Jawaban Terbaik">Jadikan Jawaban Yang Terbaik</button>
+                            </form>
+                        </div>
+                        @endif
                     @endguest
+                    @if($j->is_best == 1)
+                        <button class="btn btn-lg" data-toggle="tooltip" data-placement="right" title="Jawaban Terbaik"><i class="fa fa-check text-success"></i></button>
+                    @endif  
                 </div>
                 <div class="col-lg-10 col-sm-10 mb-2">
                     @php
@@ -280,6 +261,12 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Tidak bisa memberi vote pada pertanyaan sendiri'
+                })
+        }
+        function votejawaban(){
+            Swal.fire({
+                icon: 'error',
+                title: 'Tidak bisa memberi vote pada jawaban sendiri'
                 })
         }
         function validasirep(){

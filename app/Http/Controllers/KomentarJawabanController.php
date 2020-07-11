@@ -11,10 +11,10 @@ class KomentarJawabanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'komentar' => 'required',
+            'komentar' => 'required'
         ]);
         $data = new KomentarJawaban([
-            'komentar' => $request->komentar,
+            'isi' => $request->komentar,
             'jawaban_id' => $request->id_jawaban,
             'user_id' => Auth::user()->id,
         ]);

@@ -14,8 +14,6 @@
                 <li class="list-inline-item mr-2"><a class="nav-link" href="{{ route('login') }}">{{ __('Masuk') }}</a></li>
               </ul>
               @else
-            </li>
-          </ul>
               <div class="dropdown">
                   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       {{ Auth::user()->name }}
@@ -25,7 +23,7 @@
                     @php
                          $cekrep = App\Profile::where('user_id', Auth::user()->id)->first();
                     @endphp
-                    <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">My Reputation  <kbd>{{$cekrep->reputation}}</kbd></a>
+                    <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">My Reputation  <kbd class="pull-right">{{$cekrep->reputation}}</kbd></a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('home') }}">Profile</a>
                     <a class="dropdown-item" href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> {{ __('Keluar') }}</a>

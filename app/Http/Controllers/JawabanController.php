@@ -30,4 +30,13 @@ class JawabanController extends Controller
         $data->save();
         return redirect('/pertanyaan/' . $request->id_pertanyaan)->with('success', 'Behasil Di Submit');
     }
+
+    public function best_aswer(Request $request)
+    {
+        $data = Jawaban::where('id', $request->id_jawaban)->first();
+        $data->is_best = 1;
+        $data->update();
+
+        return redirect()->back();
+    }
 }

@@ -12,22 +12,32 @@ class VotePertanyaanController extends Controller
 {
     public function vote(Request $request)
     {
-        if ($request->vote == 0) {
-            $data = new Vote_Pertanyaan([
-                'user_id' => Auth::user()->id,
-                'pertanyaan_id' => $request->pertanyaan_id,
-                'vote' => 0
-            ]);
-        } elseif ($request->vote == 1) {
-            $data = new Vote_Pertanyaan([
-                'user_id' => Auth::user()->id,
-                'pertanyaan_id' => $request->pertanyaan_id,
-                'vote' => 1
-            ]);
+        $dbquestion = Vote_Pertanyaan::where(['pertanyaan_id' => $request->pertanyaan_id, 'user_id' => Auth::user()->id])->first();
+
+        if ($dbquestion == null) {
+            if ($request->vote == 0) {
+                $data = new Vote_Pertanyaan([
+                    'user_id' => Auth::user()->id,
+                    'pertanyaan_id' => $request->pertanyaan_id,
+                    'vote' => 0
+                ]);
+            } elseif ($request->vote == 1) {
+                $data = new Vote_Pertanyaan([
+                    'user_id' => Auth::user()->id,
+                    'pertanyaan_id' => $request->pertanyaan_id,
+                    'vote' => 1
+                ]);
+            } else {
+                return "/";
+            }
+
+            $data->save();
         } else {
-            return "/";
+            $data = Vote_Pertanyaan::where(['pertanyaan_id' => $request->pertanyaan_id, 'user_id' => Auth::user()->id])->first();
+            $data->vote = $request->vote;
+            $data->update();
         }
-        $data->save();
+
         $votepertanyaan = Pertanyaan::find($request->pertanyaan_id);
         $repuserpenanya = Profile::where('user_id', $votepertanyaan->penanya_id)->first();
         $userpemberivote = Profile::where('user_id', Auth::user()->id)->first();
@@ -46,6 +56,6 @@ class VotePertanyaanController extends Controller
         }
         $votepertanyaan->vote = $data;
         $votepertanyaan->update();
-        return redirect('/pertanyaan/' . $votepertanyaan->id);
+        return redirect()->back();
     }
 }
