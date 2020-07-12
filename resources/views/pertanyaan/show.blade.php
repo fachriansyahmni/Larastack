@@ -263,9 +263,14 @@
                             @foreach ($komentarjawaban as $kj)
                                 @php
                                     $komen2 = strip_tags($kj->isi, '<b>');
-                                    $peoples2 = DB::table('users')->join('komentar_jawaban','komentar_jawaban.user_id','=','users.id')->where('komentar_jawaban.user_id',$kj->user_id)->first();
+                                    $peoples2 = DB::table('users')->join('komentar_jawaban','komentar_jawaban.user_id','=','users.id')->where('komentar_jawaban.user_id',$kj->user_id)->get();
                                 @endphp
-                                {!! html_entity_decode(\Illuminate\Support\Str::limit($komen2, 100, $end='...')) !!} - <cite title="Source Title">{{$peoples->name}} {{ $kj->created_at }}</cite>
+                                {!! html_entity_decode(\Illuminate\Support\Str::limit($komen2, 100, $end='...')) !!} - 
+                                <cite title="Source Title">
+                                    @foreach ($peoples2 as $p)
+                                    {{$p->name}} 
+                                    @endforeach
+                                    {{ $kj->created_at }}</cite>
                                 <hr class="mt-1 mb-1">
                             @endforeach
                         @endif
