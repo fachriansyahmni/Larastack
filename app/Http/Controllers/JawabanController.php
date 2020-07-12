@@ -43,4 +43,29 @@ class JawabanController extends Controller
 
         return redirect()->back();
     }
+    public function edit($id)
+    {
+        $data = Jawaban::find($id);
+        return view('jawaban.edit', compact('data'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'isi' => 'required'
+        ]);
+        $data = Jawaban::findorfail($id);
+        $data_edited = [
+            'jawaban' => $request->isi
+        ];
+        $data->update($data_edited);
+
+        return redirect('/pertanyaan/' . $data->pertanyaan_id);
+    }
+
+    public function delete($id)
+    {
+        $jawaban = Jawaban::find($id)->delete();
+        return redirect()->back();
+    }
 }

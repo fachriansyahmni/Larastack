@@ -222,6 +222,19 @@
                     @endif  
                 </div>
                 <div class="col-lg-10 col-sm-10 mb-2">
+                    @guest 
+                    @else 
+                        @if($j->user_id== Auth::user()->id)
+                            <form action="{{ route('delete-answer',['id' => $j->id]) }}" method="post" class=" pull-right">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-sm"><i class="fa fa-trash text-danger"></i> </button>
+                            </form>
+                            <a href="{{ route('edit-answer',['id' => $j->id]) }}" class="pull-right">
+                                <button class="btn btn-sm"><i class="fa fa-edit"></i> </button>
+                            </a>
+                        @endif
+                    @endguest 
                     @php
                         $str = strip_tags($j->jawaban, '<p><strong><ol><li><blockquote>');
                     @endphp

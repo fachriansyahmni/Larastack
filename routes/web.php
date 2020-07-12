@@ -19,6 +19,9 @@ Route::post('/pertanyaan/komentar/{id}', 'PertanyaanController@store_comment')->
 Route::get('/jawaban/{pertanyaan_id}', 'JawabanController@index')->name('answer');
 Route::post('/jawaban/{pertanyaan_id}', 'JawabanController@store')->name('store-answer');
 Route::put('/jawaban/best_answer', 'JawabanController@best_aswer')->name('best-answer');
+Route::get('/jawaban/{id}/edit', 'JawabanController@edit')->name('edit-answer')->middleware('auth');
+Route::put('/pertanyaan/{id}', 'JawabanController@update')->name('update-answer');
+Route::delete('/jawaban/{id}', 'JawabanController@delete')->name('delete-answer');
 
 Route::post('/komentar/{id}', 'KomentarJawabanController@store')->name('store-comment');
 
