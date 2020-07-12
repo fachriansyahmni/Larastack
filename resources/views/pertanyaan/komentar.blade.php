@@ -82,14 +82,14 @@
         <div class="col-lg-10 col-sm-10 mt-2">
             @php
                 $komen = strip_tags($k->isi, '<b>');
-                $peoples = DB::table('users')->join('komentar_pertanyaan','komentar_pertanyaan.user_id','=','users.id')->where('komentar_pertanyaan.pertanyaan_id',$data->id)->first();
+                $peoples = DB::table('users')->join('komentar_pertanyaan','komentar_pertanyaan.user_id','=','users.id')->where('komentar_pertanyaan.user_id',$k->user_id)->first();
             @endphp
                     {!! html_entity_decode($komen) !!} <p class="blockquote-footer"><cite title="Source Title">{{$peoples->name}} {{ $k->created_at }}</cite>
                     @guest
                     @else    
                         @if ($k->user_id == Auth::user()->id)
-                            <a href="#" class="pull-right" data-toggle="tooltip" data-placement="top" title="Hapus Pertanyaan"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                            <a href="#" class="pull-right mr-2" data-toggle="tooltip" data-placement="top" title="Edit Pertanyaan"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <a href="#" class="pull-right" data-toggle="tooltip" data-placement="top" title="Hapus Komentar"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <a href="#" class="pull-right mr-2" data-toggle="tooltip" data-placement="top" title="Edit Komentar"><i class="fa fa-edit" aria-hidden="true"></i></a>
                         @endif
                     @endguest
                 </p>
