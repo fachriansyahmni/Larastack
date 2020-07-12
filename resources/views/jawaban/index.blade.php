@@ -86,11 +86,13 @@
             <div class="col-lg-10 col-sm-10">
                 @php
                     $komen = strip_tags($k->isi, '');
-                    $peoples = DB::table('users')->join('komentar_jawaban','komentar_jawaban.user_id','=','users.id')->where('komentar_jawaban.jawaban_id',$jawaban->id)->first();
+                    $peoples = DB::table('users')->join('komentar_jawaban','komentar_jawaban.user_id','=','users.id')->where('komentar_jawaban.user_id',$k->user_id)->get();
                 @endphp
                      <p>
                         <b>
-                            {{$peoples->name}}</b>@ {!! html_entity_decode($komen) !!}
+                            @foreach ($peoples as $p)
+                            {{$p->name}}
+                            @endforeach</b>@ {!! html_entity_decode($komen) !!}
                     </p>
                     <div class="col text-right">
                         <small>{{ $k->created_at }}</small>
